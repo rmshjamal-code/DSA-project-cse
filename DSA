@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+// Structure to store student information
+struct Student {
+    int roll;
+    char name[50];
+    float marks;
+};
+
+// Function prototypes
+void addStudent(struct Student s[], int *n);
+void displayStudents(struct Student s[], int n);
+void searchStudent(struct Student s[], int n);
+void sortStudents(struct Student s[], int n);
+
+int main() {
+    struct Student s[MAX];
+    int n = 0, choice;
+
+    printf("\n===== Student Record Management System =====\n");
+
+    while (1) {
+        printf("\n1. Add Student");
+        printf("\n2. Display Students");
+        printf("\n3. Search Student by Roll Number");
+        printf("\n4. Sort Students by Marks");
+        printf("\n5. Exit");
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addStudent(s, &n);
+                break;
+            case 2:
+                displayStudents(s, n);
+                break;
+            case 3:
+                searchStudent(s, n);
+                break;
+            case 4:
+                sortStudents(s, n);
+                break;
+            case 5:
+                printf("\nExiting program. Goodbye!\n");
+                return 0;
+            default:
+                printf("\nInvalid choice! Try again.\n");
+        }
+    }
+
+    return 0;
+}
+
+// Function to add a new student
+void addStudent(struct Student s[], int *n) {
+    printf("\nEnter Roll Number: ");
+    scanf("%d", &s[*n].roll);
+    printf("Enter Name: ");
+    scanf(" %[^\n]", s[*n].name); // To read string with spaces
+    printf("Enter Marks: ");
+    scanf("%f", &s[*n].marks);
+
+    (*n)++;
+    printf("\nStudent added successfully!\n");
+}
+
+// Function to display all students
+void displayStudents(struct Student s[], int n) {
+    if (n == 0) {
+        printf("\nNo records found!\n");
+        return;
+    }
+
+    printf("\n%-10s %-20s %-10s\n", "Roll No", "Name", "Marks");
+    printf("-------------------------------------------------\n");
+    for (int i = 0; i < n; i++) {
+        printf("%-10d %-20s %-10.2f\n", s[i].roll, s[i].name, s[i].marks);
+    }
+}
+
+// Function to search student by roll number
+void searchStudent(struct Student s[], int n) {
+    if (n == 0) {
+        printf("\nNo records to search!\n");
+        return;
+    }
+
+    int roll, found = 0;
+    printf("\nEnter roll number to search: ");
+    scanf("%d", &roll);
+
+    for (int i = 0; i < n; i++) {
+        if (s[i].roll == roll) {
+            printf("\nStudent Found!\n");
+            printf("Roll No: %d\nName: %s\nMarks: %.2f\n", s[i].roll, s[i].name, s[i].marks);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found)
+        printf("\nStudent with Roll No %d not found!\n", roll);
+}
+
+// Function to sort students by marks (Bubble Sort)
+void sortStudents(struct Student s[], int n) {
+    if (n == 0) {
+        printf("\nNo records to sort!\n");
+        return;
+    }
+
+    struct Student temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (s[j].marks < s[j + 1].marks) { // Sort in descending order
+                temp = s[j];
+                s[j] = s[j + 1];
+                s[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\nStudents sorted by marks (High to Low)!\n");
+}
